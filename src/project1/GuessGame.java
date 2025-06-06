@@ -11,28 +11,16 @@ package project1;
  * @version 28 May 2025
  *
  *
- * 2.6. plans:
- *  - リプレイ機能をつける（「もう一度遊びますか？」）
+ * Future plans:
  *  - プレイ結果のログ（平均回数、ベストスコア）
  *  - 複数プレイヤー対応（プレイヤーをクラスにする）
  *  
- *  feedbacks:
- *  1. counterの使い方      現在、counterが**static（クラス全体）**で、ループ内でも ++ しており、やや混乱を生みます。
- *                         staticにするなら**「累計のプレイ回数」など、プレイごとに蓄積される意味**をもたせた方が混乱が少ないです。
- *      
- *  2. クラス設計の意図の明確化    現在、player や youWon がすべて static であるため、「ゲーム＝1人で1回きりのプレイ」という前提になります。
- *                             今後の練習のためにも、インスタンス変数を使って「1人のプレイヤーが何度も遊ぶ」形に拡張するのもおすすめです。
- *                             
- *  3. 小さなロジック改善提案  =   doYouWantToPlay() の入力バリデーション
- *                            現在 nextInt() のみを使用しており、文字を打つとクラッシュします。   
+ *  feedbacks/development:
+ * - GameSession.play() の分離と読みやすさ改善
+ * - InputTaker に範囲付きの数値取得追加   
  *
  *
  * ==============================
- * 
- * OOPの練習として拡張する案
- * - 複数のクラスに役割をわける　例）GuessGame, Player, GameSession
- * - 複数回プレイ、勝率や平均試行回数の記録
- * - カプセル化、getter, setterの使用
  * 
  * 発展
  * - ログファイルに結果の書き出し
@@ -85,8 +73,9 @@ public class GuessGame {
     }
     
     
-    private void play() {
-        session.play();
+    private void play(Player person) {
+        session.newSession();
+        session.play(person);
     }
 
     
@@ -135,9 +124,9 @@ public class GuessGame {
             this.endTheGame();
             return;
         }
-        //startPlaying = true
-        System.out.println("Let's go!");
-        this.play();
+        
+        System.out.println("Let's go!\n");
+        this.play(this.player);
     }
     
     

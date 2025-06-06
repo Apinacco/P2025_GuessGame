@@ -3,23 +3,20 @@
  */
 package project1;
 
-
+import java.util.Random;
 
 /**
  * @author aichinos
- * @version 4 Jun 2025
- * 
- * < One game round >
- *  Roles are:
- *
+ * @version 6 Jun 2025
  */
 public class GameSession {
 
-    private int counter;
+    private int counter;//how many times have the player guessed
     private int answer;//this round's answer
+    private Player player;
     
-    final static int minimum = 1;
-    final static int maximun = 20;
+    final static int min = 1;
+    final static int max = 20;
 
 //=======================================================
     
@@ -55,7 +52,9 @@ public class GameSession {
      * Pick randomly one number from 1 to 20
      */
     private int pickTheAnswer() {
-        return minimum + (int) (Math.random()*maximun);
+        //return min + (int) (Math.random()*max);
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
     }
     
     
@@ -92,7 +91,7 @@ public class GameSession {
         
         int input = InputTaker.getInt();
         if (input == 1) {
-            System.out.println("Reset the counter and the new answer is picked.");
+            System.out.println("Reset the counter and the new answer is picked.\n");
             return true;
         }
         return false;
@@ -100,20 +99,24 @@ public class GameSession {
     
     
     /**
+     * @param player1 the player of the session
+     * TODO: make into smaller functions!
      * 
      */
-    public void play() {
+    public void play(Player player1) {
+        
+        this.player = player1;
+        
         infoMessage();
         
         System.out.println("What would it be? >> \n");
         int n = InputTaker.getInt();
-        this.counter += 1;//counter = 1;
+        this.counter += 1;
         int check = whereIsTheAnswer(n);
         
         while (check != 0) {
             n = InputTaker.getInt();
             check = whereIsTheAnswer(n);
-            //TODO: show the hint according to the player's guess
             this.counter++;
         }
         //when check = 0
@@ -125,7 +128,7 @@ public class GameSession {
      * Show the guiding message to the player
      */
     private void infoMessage() {
-        System.out.printf("One number is picked radomly from %d to %d.\n", minimum, maximun);
+        System.out.printf("One number is picked radomly from %d to %d.\n", min, max);
     }
     
     
@@ -150,20 +153,60 @@ public class GameSession {
     
     
     private void endSession() {
-        System.out.println("Congratulations!");
-        //TODO:
-        //show the result of the game in summary, + ask another round??
+        System.out.println();
+        showSessionSummary();
     }
     
     
+    /**
+     * Save the current round's result to the player object
+     */
+    private void saveTheResult() {
+        
+        int previousScore = getBestScore();
+        if (this.counter < previousScore) {
+            System.out.println("New record!");
+            player.setBestScore(this.counter);
+        }
+    }
+
+
+    private int getBestScore() {
+        return player.getBestScore();
+    }
+
+
+    /**
+     * After the player got the answer, show a brief summary of the session
+     */
+    private void showSessionSummary() {
+        
+        System.out.println("======== Result ========");
+        System.out.println("Player: " + this.getPlayerName());
+        System.out.printf("You used %d guesses to hit the answer.\n", this.counter);
+        
+        saveTheResult();
+        
+        System.out.println("Your best: " + getBestScore() + " guesses");//TODO: check if the score is better than the previous tries
+        System.out.println("========================\n");
+        
+    }
+
     
+    private String getPlayerName() {
+        return player.getName();
+    }
+
+
+//================================================================================
+
     /**
      * @param args not in use
      */
     public static void main(String[] args) {
         GameSession test = new GameSession();
         System.out.println(test.getAnswer());
-        test.play();
+        test.play(new Player("NekoTest"));
     }
 
 }

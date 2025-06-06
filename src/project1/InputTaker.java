@@ -14,7 +14,7 @@ import java.util.*;
  * - modify the result if necessary
  * 
  * @author aichinos
- * @version 5 Jun 2025
+ * @version 6 Jun 2025
  *
  */
 public class InputTaker {
@@ -24,12 +24,9 @@ public class InputTaker {
     
     //====================================
     
-    /**
-     * 
-     */
+    @SuppressWarnings("javadoc")
     public InputTaker() {
-        //Scanner sc = new Scanner(System.in);
-        //scanner = sc;
+        //
     }
     
     
@@ -43,10 +40,24 @@ public class InputTaker {
     
     /**
      * @return user input, which is suitable for int
-     * TODO: check if the input is really suitable for int!
+     * TODO: check the range??
      */
     public static int getInt() {
-        return scanner.nextInt();
+        
+        while(true) {
+            
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.err.println(e.getMessage());
+                System.out.println("Input should be a number, try again.");
+                scanner.nextLine();//Note! Clear the invalid input
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+                System.out.println("Something went wrong, try again.");
+                scanner.nextLine();
+            } 
+        }
     }
     
     
@@ -54,7 +65,7 @@ public class InputTaker {
      * @return user input as String
      */
     public static String getString() {
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
     
     
@@ -67,14 +78,25 @@ public class InputTaker {
         return scanner.nextLine().trim();
     }
     
+    
+    
     //==========================================================
 
     /**
      * @param args not in use
      */
     public static void main(String[] args) {
-    // TODO Auto-generated method stub
-    
+        
+        while(true) {
+            System.out.println("Any input");
+            String test = getString();
+            if (test.equals("end")) {
+                break;
+            }
+            System.out.println(test);            
+        }
+        System.out.println("Scanner closes");
+        closeTheScanner();
     }
 
 }

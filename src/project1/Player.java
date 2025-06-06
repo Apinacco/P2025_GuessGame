@@ -5,18 +5,15 @@ package project1;
 
 /**
  * @author aichinos
- * @version 4 Jun 2025
+ * @version 6 Jun 2025
  * 
- * < Player >
- *  Roles are:
- *
  */
 public class Player {
     
     private String name = "";//player's name
     private static final String defaultName = "Neko";
     
-    private int bestScore;
+    private int bestScore = 10000;
     private int tried;//how many sessions have the player played
     
 //==============================================================
@@ -76,15 +73,18 @@ public class Player {
         System.out.println("OK/Confirm >> press 1");
         System.out.println("No/Cancel >> press 0");
         
-        try (java.util.Scanner sc = new java.util.Scanner(System.in)) {
-            int n = sc.nextInt();
+        int n = InputTaker.getInt();
             
-            if (n == 1) {
+        if (n == 1) {
                 return true;
-            }
         }
         return false;
     }
+    
+    
+    /*public void setDefaultName(String newDefault) {
+        this.defaultName = newDefault;
+    }*/
     
     
     /**
@@ -120,6 +120,19 @@ public class Player {
         if (n >= 0) {
             this.tried = n;
         }
+    }
+    
+    
+    //===========================================0
+    
+    @SuppressWarnings("javadoc")
+    public static void main(String[] args) {
+        Player tester = new Player("John");
+        System.out.println(tester.tried);
+        System.out.println(tester.bestScore);
+        
+        tester.setBestScore(3);
+        System.out.println(tester.bestScore);
     }
 
 }
