@@ -11,7 +11,7 @@ package project1;
 public class Player {
     
     private String name = "";//player's name
-    private static final String defaultName = "Neko";
+    private static final String defaultName = "NEKO";
     
     private int bestScore = 10000;
     private int tried;//how many sessions have the player played
@@ -20,14 +20,18 @@ public class Player {
     
     /**
      * Create a player class with a name that a user picked
-     * TODO: how to check if the player's input is valid or not 
      * @param name String input
+     * @example
+     * <pre name="test">
+     *  Player a = new Player("a");
+     *  a.toString() === "Player name: A | Best score so far: 10000";
+     *  
      */
     public Player(String name) {
         if (name.isBlank() || name.isEmpty()) {
             this.name = defaultName;
         } else {
-            this.name = name;
+            this.name = name.toUpperCase();
         }
     }
     
@@ -37,6 +41,13 @@ public class Player {
      */
     public Player() {
         this.name = defaultName;
+    }
+    
+    
+    @Override
+    public String toString() {
+        String line = String.format("Player name: %s | Best score so far: %d", this.name, this.bestScore);
+        return line;
     }
     
 //=================================================
