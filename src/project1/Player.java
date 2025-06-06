@@ -24,8 +24,11 @@ public class Player {
      * @example
      * <pre name="test">
      *  Player a = new Player("a");
-     *  a.toString() === "Player name: A | Best score so far: 10000";
-     *  
+     *      a.toString() === "Player name: A | Best score so far: 10000";
+     *  Player b = new Player("aB");
+     *      b.toString() === "Player name: AB | Best score so far: 10000";
+     *  Player c = new Player();
+     *      c.toString() === "Player name: NEKO | Best score so far: 10000";
      */
     public Player(String name) {
         if (name.isBlank() || name.isEmpty()) {
@@ -55,6 +58,12 @@ public class Player {
     
     /**
      * @return player's name
+     * @example
+     * <pre name="test">
+     *   Player nameTest1 = new Player();
+     *      nameTest1.getName() === "NEKO";
+     *   Player nameTest2 = new Player("uyHu");
+     *      nameTest2.getName() === "UYHU";
      */
     public String getName() {
         return this.name;
@@ -63,11 +72,13 @@ public class Player {
     
     /**
      * @param newName new name for a player
+     * TODO: Test-writing!!!
      */
     public void setName(String newName) {
-        boolean wantsToChange = confirmTheWish(newName);
+        String changedName = newName.toUpperCase();
+        boolean wantsToChange = confirmTheWish(changedName);
         if (wantsToChange) {
-            this.name = newName;
+            this.name = changedName;
             System.out.println("Your name has been changed. New name: " + getName());
         }
         return;
@@ -78,6 +89,7 @@ public class Player {
      * Ask confirmation from a player
      * @param newName candidate of a new name
      * @return true if a player accept a change
+     * TODO: how to write a test for this??
      */
     private boolean confirmTheWish(String newName) {
         System.out.println("Your name will be changed into "  + newName );
@@ -93,24 +105,25 @@ public class Player {
     }
     
     
-    /*public void setDefaultName(String newDefault) {
-        this.defaultName = newDefault;
-    }*/
-    
-    
     /**
      * @return player's best score
+     * @example
+     * <pre name="test">
+     *     Player scoreTest1 = new Player();
+     *         scoreTest1.getBestScore() === 10000;
+     *         scoreTest1.setBestScore(10); scoreTest1.getBestScore() === 10;
+     *         scoreTest1.setBestScore(24); scoreTest1.getBestScore() === 10;
+     *         scoreTest1.setBestScore(-5); scoreTest1.getBestScore() === 10;
      */
     public int getBestScore() {
         return this.bestScore;
     }
     
-    
     /**
      * @param n new best score
      */
     public void setBestScore(int n) {
-        if (this.bestScore > n) {
+        if (this.bestScore > n && n > 0) {
             this.bestScore = n;
         }
     }
@@ -118,11 +131,11 @@ public class Player {
     
     /**
      * @return how many sessions have the player played
+     * TODO: Create a function for this variable or delete!!
      */
     public int getTried() {
         return this.tried;
     }
-    
     
     /**
      * @param n set how many time the played have played the session
@@ -131,19 +144,6 @@ public class Player {
         if (n >= 0) {
             this.tried = n;
         }
-    }
-    
-    
-    //===========================================0
-    
-    @SuppressWarnings("javadoc")
-    public static void main(String[] args) {
-        Player tester = new Player("John");
-        System.out.println(tester.tried);
-        System.out.println(tester.bestScore);
-        
-        tester.setBestScore(3);
-        System.out.println(tester.bestScore);
     }
 
 }

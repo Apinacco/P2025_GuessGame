@@ -60,13 +60,11 @@ public class GuessGame {
         return;
     }
 
-
-
+    
     //================================================================
     
-    
     /**
-     * Constructor
+     * 
      */
     public GuessGame() {
         session = new GameSession();
@@ -116,7 +114,9 @@ public class GuessGame {
     }
     
     
-    
+    /**
+     * @param reaction if this is true, the player want to play another round
+     */
     private void takeActions(boolean reaction) {
         
         if (!reaction) {

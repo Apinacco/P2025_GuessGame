@@ -52,7 +52,6 @@ public class GameSession {
      * Pick randomly one number from 1 to 20
      */
     private int pickTheAnswer() {
-        //return min + (int) (Math.random()*max);
         Random random = new Random();
         return random.nextInt(max - min + 1) + min;
     }
@@ -60,6 +59,12 @@ public class GameSession {
     
     /**
      * @return this round's answer
+     * @example
+     * <pre name="test">
+     *    GameSession answerTest = new GameSession();
+     *      answerTest.setAnswer(14); answerTest.getAnswer() === 14;
+     *      answerTest.setAnswer(2); answerTest.getAnswer() === 2; 
+     * 
      */
     public int getAnswer() {
         return this.answer;
@@ -75,9 +80,27 @@ public class GameSession {
     
     /**
      * @return how many times the player has guessed in this round
+     * @example
+     * <pre name="test">
+     *     GameSession scoreTest = new GameSession();
+     *         scoreTest.getScore() === 0;
+     *         
+     *         scoreTest.setScore(2); scoreTest.getScore() === 2;
+     *         scoreTest.setScore(-4); scoreTest.getScore() === 2;
+     *         scoreTest.setScore(0); scoreTest.getScore() === 2;
      */
     public int getScore() {
         return this.counter;
+    }
+    
+    /**
+     * set the value of a counter, made for testing 
+     * @param n value that I want to assign to the counter
+     */
+    public void setScore(int n) {
+        if (n > 0) {
+            this.counter = n;
+        }
     }
     
     
@@ -110,19 +133,10 @@ public class GameSession {
         infoMessage();
         
         System.out.println("What would it be? >> \n");
-        int n = InputTaker.getInt();
-        this.counter += 1;
-        int check = whereIsTheAnswer(n);
+        askUsersGuess();
         
-        while (check != 0) {
-            n = InputTaker.getInt();
-            check = whereIsTheAnswer(n);
-            this.counter++;
-        }
-        //when check = 0
         endSession();
     }
-
 
     /**
      * Show the guiding message to the player
@@ -132,8 +146,23 @@ public class GameSession {
     }
     
     
+
+    private void askUsersGuess() {
+        
+        int n = InputTaker.getInt();
+        this.counter += 1;
+        int check = whereIsTheAnswer(n);
+        
+        while (check != 0) {
+            n = InputTaker.getInt();
+            check = whereIsTheAnswer(n);
+            this.counter++;
+        }
+    }
+
+
+    
     /**
-     * 
      * @param n
      * @return 0, if the player guessed right
      *         1, if the player's guess is larger than the answer
