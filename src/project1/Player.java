@@ -3,67 +3,92 @@
  */
 package project1;
 
+
 /**
- * @author aichinos
- * @version 6 Jun 2025
+ * The Player class represents a game participant and stores their information,
+ * such as name and best score. It provides methods to validate player names,
+ * track the best score achieved, and handle default values.
  * 
+ * Responsibilities:
+ * - Maintain player details (name, best score)
+ * - Validate input for player name
+ * - Update and retrieve the best score
  */
 public class Player {
     
-    private String name = "";//player's name
-    private static final String defaultName = "NEKO";
-    
+    private String name = "";
+    @SuppressWarnings("javadoc")
+    public static final String DEFAULT_NAME = "NEKO";
     private int bestScore = 10000;
-    private int tried;//how many sessions have the player played
+    
     
 //==============================================================
     
-    /**
-     * Create a player class with a name that a user picked
-     * @param name String input
-     * @example
-     * <pre name="test">
-     *  Player a = new Player("a");
-     *      a.toString() === "Player name: A | Best score so far: 10000";
-     *  Player b = new Player("aB");
-     *      b.toString() === "Player name: AB | Best score so far: 10000";
-     *  Player c = new Player();
-     *      c.toString() === "Player name: NEKO | Best score so far: 10000";
-     */
-    public Player(String name) {
-        if (name.isBlank() || name.isEmpty()) {
-            this.name = defaultName;
+   /**
+    * Creates a Player instance with the provided name. 
+    * If the name is invalid, assigns a default name.
+    * 
+    * @param enteredName name that a player entered
+    * @example
+    * <pre name="test">
+    *    Player player1 = new Player("kaori");
+    *        assertEquals("KAORI", player1.getName());
+    *        player1.toString() === "Player name: KAORI | Best score: 10000";
+    *            assertTrue(Player.isValidName("kaori"));
+    *            assertFalse(Player.isValidName(""));             // blank, invalid
+    *            assertFalse(Player.isValidName(" "));            // blank, invalid
+    *            assertFalse(Player.isValidName(null));           // null, invalid
+    *            assertFalse(Player.isValidName("a".repeat(31))); // too long, invalid
+    *    Player player2 = new Player(null);
+    *        assertFalse(Player.isValidName(null));
+    *        assertEquals("NEKO", player2.getName());
+    *        player2.toString() === "Player name: NEKO | Best score: 10000";
+    *    Player player3 = new Player("YUKO");
+    *        assertEquals("YUKO", player3.getName());
+    *        player3.toString() === "Player name: YUKO | Best score: 10000";
+    */
+    public Player(String enteredName) {
+        
+        if (isValidName(enteredName)) {
+            this.name = enteredName.toUpperCase();
         } else {
-            this.name = name.toUpperCase();
+            this.name = DEFAULT_NAME;
         }
     }
     
     
     /**
-     * Create a player with the default name
+     * Checks whether the provided name is valid as a player's name
+     * @param enteredName proposed player name
+     * @return true if the proposed name is valid
+     * 
      */
-    public Player() {
-        this.name = defaultName;
+    public static boolean isValidName(String enteredName) {
+        if (enteredName == null || enteredName.isBlank() || enteredName.length() > 30) {
+            return false;
+        } 
+        return true;
     }
     
     
     @Override
     public String toString() {
-        String line = String.format("Player name: %s | Best score so far: %d", this.name, this.bestScore);
-        return line;
+        StringBuilder line = new StringBuilder(String.format("Player name: %s | Best score: %d", this.name, this.bestScore));
+        return line.toString();
     }
     
 //=================================================
     
     
     /**
+     * Retrieves the player's name
      * @return player's name
      * @example
      * <pre name="test">
-     *   Player nameTest1 = new Player();
-     *      nameTest1.getName() === "NEKO";
-     *   Player nameTest2 = new Player("uyHu");
-     *      nameTest2.getName() === "UYHU";
+     *   Player getNameTest = new Player("");
+     *      assertEquals("NEKO", getNameTest.getName());
+     *   Player getNameTest2 = new Player("uyHu");
+     *      assertEquals("UYHU", getNameTest2.getName());
      */
     public String getName() {
         return this.name;
@@ -71,79 +96,45 @@ public class Player {
     
     
     /**
-     * @param newName new name for a player
-     * TODO: Test-writing!!!
-     */
-    public void setName(String newName) {
-        String changedName = newName.toUpperCase();
-        boolean wantsToChange = confirmTheWish(changedName);
-        if (wantsToChange) {
-            this.name = changedName;
-            System.out.println("Your name has been changed. New name: " + getName());
-        }
-        return;
-    }
-
-
-    /**
-     * Ask confirmation from a player
-     * @param newName candidate of a new name
-     * @return true if a player accept a change
-     * TODO: how to write a test for this??
-     */
-    private boolean confirmTheWish(String newName) {
-        System.out.println("Your name will be changed into "  + newName );
-        System.out.println("OK/Confirm >> press 1");
-        System.out.println("No/Cancel >> press 0");
-        
-        int n = InputTaker.getInt();
-            
-        if (n == 1) {
-                return true;
-        }
-        return false;
-    }
-    
-    
-    /**
+     * Retrieves the player's best score
      * @return player's best score
      * @example
      * <pre name="test">
-     *     Player scoreTest1 = new Player();
-     *         scoreTest1.getBestScore() === 10000;
-     *         scoreTest1.setBestScore(10); scoreTest1.getBestScore() === 10;
-     *         scoreTest1.setBestScore(24); scoreTest1.getBestScore() === 10;
-     *         scoreTest1.setBestScore(-5); scoreTest1.getBestScore() === 10;
+     * 
+     *     Player scoreTest = new Player("score");
+     *         assertEquals(10000, scoreTest.getBestScore());
+     *         scoreTest.isNewBest(10); assertEquals(10, scoreTest.getBestScore());
+     *         scoreTest.isNewBest(24); assertEquals(10, scoreTest.getBestScore());
+     *         scoreTest.isNewBest(-5); assertEquals(10, scoreTest.getBestScore());
      */
     public int getBestScore() {
         return this.bestScore;
     }
     
     /**
-     * @param n new best score
+     * Updates the best score if the new score is lower and greater than zero.
+     * @param newScore new best score
+     * @return true if a new best is set
      */
-    public void setBestScore(int n) {
-        if (this.bestScore > n && n > 0) {
-            this.bestScore = n;
+    public boolean isNewBest(int newScore) {
+        if (this.bestScore > newScore && newScore > 0) {
+            this.bestScore = newScore;
+            return true;
         }
+        return false;
     }
     
     
     /**
-     * @return how many sessions have the player played
-     * TODO: Create a function for this variable or delete!!
+     * Retrieves the default player name used when no valid name is provided
+     * @return setted default name
      */
-    public int getTried() {
-        return this.tried;
+    public static String getDefaultName() {
+        return DEFAULT_NAME;
     }
     
-    /**
-     * @param n set how many time the played have played the session
-     */
-    public void setTried(int n) {
-        if (n >= 0) {
-            this.tried = n;
-        }
-    }
-
+    
+    // Future feature: Track session attempts for each player
+    // private int[] results;
+    // TODO: Implement or remove placeholder methods
 }
